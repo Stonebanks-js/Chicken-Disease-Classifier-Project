@@ -1,10 +1,12 @@
 from cnnClassifier.constants import *
 from cnnClassifier.utils.common import read_yaml, create_directories
-from cnnClassifier.entity.config_entity import (DataIngestionConfig,
+from cnnClassifier.entity.config_entity import (DataIngestionConfig, Evaluationconfig,
                                                 PrepareBaseModelConfig,
                                                 PrepareCallbacksConfig,
-                                                TrainingConfig)
+                                                TrainingConfig,
+                                                Evaluationconfig)
 import os
+from pathlib import Path
 
 class ConfigurationManager:
     def __init__(
@@ -88,3 +90,13 @@ class ConfigurationManager:
             params_image_size=params.IMAGE_SIZE
         )
         return training_config
+    
+    def get_validation_config(self) -> Evaluationconfig:
+        eval_config = Evaluationconfig(
+            path_of_model=Path("artifacts/training/model.keras"),
+            training_data=Path("artifacts/data_ingestion/Chicken-fecal-images"),
+            all_params=self.params,
+            params_image_size=self.params.IMAGE_SIZE,
+            params_batch_size=self.params.BATCH_SIZE
+        )
+        return eval_config
